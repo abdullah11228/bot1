@@ -12,8 +12,8 @@ app.listen(process.env.PORT || 3000, () => {
 
 function createBot() {
   const bot = mineflayer.createBot({
-    host: 'faceoff.aternos.me',
-    port: 25565,
+    host: 'CrystalMc0.aternos.me',
+    port: 26109,
     username: 'JarvisBot',
     version: false
   });

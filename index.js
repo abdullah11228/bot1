@@ -2,12 +2,13 @@ const mineflayer = require('mineflayer');
 const express = require('express');
 const app = express();
 
-app.get('/', (req, res) => {
-  res.send('Bot is alive!');
-});
+// 🔒 Keep-alive route for Zeabur
+app.get('/', (req, res) => res.send('Bot is alive!'));
+app.get('/health', (req, res) => res.send('OK'));
 
-app.listen(process.env.PORT || 3000, () => {
-  console.log('Web server running');
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
+  console.log('✅ Web server running on port ' + port);
 });
 
 function createBot() {
@@ -28,10 +29,18 @@ function createBot() {
 
   bot.on('end', () => {
     console.log('❌ Bot disconnected, retrying in 5 sec...');
-    setTimeout(createBot, 5000);
+    setTimeout(createBot, 5000); // Auto-reconnect
   });
 
-  bot.on('error', err => console.log('Bot Error:', err.message));
+  bot.on('error', (err) => {
+    console.log('⚠️ Bot Error:', err.message);
+  });
 }
 
+// 🧠 Never crash the app
+process.on('uncaughtException', (err) => {
+  console.log('💥 Uncaught Exception:', err.message);
+});
+
 createBot();
+
